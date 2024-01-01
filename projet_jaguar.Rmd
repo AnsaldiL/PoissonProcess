@@ -1,0 +1,267 @@
+---
+title: "Projet ALEA 🐆"
+author: "Lucile Ansaldi"
+date: "2023-12-28"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+## Partie 1 : Un seul jaguar dans la zone de suivi
+
+### Question 1 :
+
+Les hypothèses suivantes peuvent être formulées :
+
+-   La caméra est indetectable par le jaguar ou n'a ni effet attirant ni
+    effet répulsant sur celui-ci. Autrement dit, un passage devant la
+    caméra n'a pas d'effet sur le prochain.
+-   Le territoire du jaguar est fermé ou on suppose que le jaguar ne va
+    pas le quitter. (- On suppose que le jaguar effectue une marche
+    aléatoire, sa position au temps t dépend uniquement de sa position
+    au temps t-1 et non de son parcourt passé. )
+
+On se place dans un cadre où le temps est considéré comme continu là où
+l'espace est discrétisé.
+
+### Question 2 :
+
+En modélisant le processus à l'aide d'un processus ponctuel d'intensité
+$\mu$ , on choisi ici un processus de Poisson homogène, on connait
+immédiatement le nombre d'observation moyen par unité de temp, c'est le
+paramètre de la loi de Poisson, nommé ici $\mu$.
+
+Ainsi, pour avoir le nombre de capture moyen effectué en une journée, on
+multiplie l'intensité des catures par heure par le nombre d'heures dans
+une journée. On obtient : $24.\mu$.
+
+### Question 3 :
+
+Comme le processus est aléatoir, on le modélise à l'aide selon un
+processus de Poisson homogène. La loi du nombre de captures effectuées
+chaque jour (noté $N$) est la suivante : $N \sim P(\mu*T_{max})$, avec
+ici $T_{max}=24$. Ainsi, une loi de Poisson est utilisée pour modéliser
+le nombre de cature effectué en une journée.
+
+### Question 4 :
+
+En supposant que le jaguar est une activité différente la nuit et le
+jour (avec une période d'activité une de repos au fil de la journée), il
+s'agit de modifier le paramètre de la loi de Poisson, $\mu$, afin
+d'autoriser plus de capture durant la période d'activité du jaguar.
+Ainsi, un $\mu_{jour}$ et un $\mu_{nuit}$ différents permettent
+d'expliciter cette différence d'activité.
+
+Suite à cette modification, on accède au nombre de capture effectué en
+une journée, $N$, comme suit : $N = N_{jour} + N_{nuit}$ avec :
+
+$$
+N_{jour} \sim P(\mu_{jour}.T_{jour})\\
+N_{nuit} \sim P(\mu_{nuit}.T_{nuit})
+$$
+
+Où $T_{jour}$ et $T_{nuit}$ sont respectivement les durées du jour et de
+la nuit.
+
+### Question 5 :
+
+En prenant en compte la territorialité du jaguar, on va venir
+sanctionner le nombre de captures effectué par la caméra selon sa
+distance au centre d'activité du jaguar. Ainsi, on multiplie le taux de
+capture moyen effectué par unité de temps, $\mu$, par le coefficient
+d'atténuation $exp(-\frac{d^2}{2})$. On adonc le modèle suivant : $$
+N = N_{jour} + N_{nuit}\\
+N_{jour} \sim P(\mu_{jour}.exp\left(-\frac{d^2}{2}\right).T_{jour})\\
+N_{nuit} \sim P(\mu_{nuit}.exp\left(-\frac{d^2}{2}\right).T_{nuit})
+$$
+
+## Partie 2 : Deux jaguars dans la zone de suivi :
+
+### Question 6 :
+
+Avec deux jaguars dans la zone d'étude, il s'agit toujours d'un
+processus de Poisson mais deux evennements peuvent mener à la
+réalisation d'une capture : "Le premier jaguar passe devant la caméra"
+ou "Le deuxième jaguar passe devant la caméra". On exclu le cas ou "les
+deux jaguars passent simultanément devant la caméra et la déclanchent".
+
+Sur le schéma représentant le processus, on a obtenu les évennements
+suivants :
+
+-   En t1, le jaguar 1 est passé devant la caméra et a ainsi déclancher
+    la première capture. Il est repassé en t2.
+
+-   En t3, c'est le deuxième jaguar qui est passé.
+
+### Question 7 :
+
+On suppose que les jaguars ne sont pas identifiables individuellement.
+Avec deux jaguars au lieu d'un, on attend deux fois plus de capture par
+jour. En effet, supposons tout d'abord que les deux jaguars soient
+discernables : en notant $U_1$ le temps auquel est observé le premier
+jaguar et $U_2$ le temps auquel est observé le second, on a :
+
+$$
+U_1 \sim E(\mu)\\
+U_2 \sim E(\mu)\\
+min(U_1, U_2) \sim E(2.\mu)
+$$
+
+C'est à dire que le temps séparant deux évennement "la caméra est
+déclanchée" suit une loi exponnetielle de paramètre $2.\mu$. On a en
+fait deux fois plus de chance de voir l'évènnement se réaliser par
+rapport au cas où un seul jaguar est considéré. Cela mène donc à deux
+fois plus d'observations de jaguar à la fin de la journée. Ainsi, en
+moyenne, on a $2*24*\mu.$ photos de jaguars.
+
+### Question 8 :
+
+L'intensité du processus ponctuel donnant les instants de détection, une
+loi exponnentielle comme présentée précédemment, est de $2.mu$.
+
+### Question 9 :
+
+On modélise le processus comme suit :
+
+D'une part, on note $N$ le nombre de capture. On a donc :
+
+$$
+N = N_1 + N_2\\
+N_1 = N_{1jour} + N_{1nuit}\\
+N_1jour \sim P(\mu_{jour}.exp\left(-\frac{d_1^2}{2}\right).T_{jour})\\
+N_1nuit \sim P(\mu_{nuit}.exp\left(-\frac{d_1^2}{2}\right).T_{nuit})\\
+$$
+
+On a la même relation avec $N_2$, au changement de distance
+caméra-centre d'activité du jaguar près.
+
+D'autre part, on note $T$ le temps séparant deux captures. On a une
+durée entre deux cature différente selon le jour et la nuit, ainsi, on
+considère $T_{jour}$ et $T_{nuit}$. Pour les captures effectuées de
+jour, on a :
+
+$$
+T_{jour} = min(T_{1jour}, T_{2jour})\\
+T_{1jour} \sim E(- \mu_{jour}.exp\left(\frac{-d_1^2}{2}\right).t)\\
+T_{2jour} \sim E(- \mu_{jour}.exp\left(\frac{-d_2^2}{2}\right).t)\\
+$$
+
+De la même manière, on a un temps entre deux capture de nuit, noté
+$T_nuit$. $$
+T_{nuit} = min(T_{1nuit}, T_{2nuit})\\
+T_{1nuit} \sim E(- \mu_{nuit}.exp\left(\frac{-d_1^2}{2}\right).t)\\
+T_{2nuit} \sim E(- \mu_{nuit}.exp\left(\frac{-d_2^2}{2}\right).t)
+$$
+
+## Partie 3 : Mise en oeuvre
+
+### Question 10 :
+
+```{r}
+## paramètres :
+#durée de la nuit Tn et du jour Tj :
+dn <- 18 #à quelle heure tombe la nuit ?
+fn <- 8 #à quelle heure se lève le jour ?
+Tn <- 24 - dn + fn
+Tj <- 24 - Tn
+
+d1 <- 0.5
+d2 <- 1
+muj <- 1
+mun <- 3
+
+attenuation <- function(d){ #fonction d'atténuation
+  exp(-(d**2)/2)
+}
+
+## Modélisation :
+#nombre de capture le jour
+Nj1 <- c(rpois(1, muj*attenuation(d1)*Tj))
+Nj2 <- c(rpois(1, muj*attenuation(d2)*Tj))
+Nj <- Nj1 + Nj2
+#temps auxquels adviennent ces captures
+Tmpsj <- c(runif(Nj, 0, Tj))
+
+#nombre de capture la nuit
+Nn1 <- c(rpois(1, mun*attenuation(d1)*Tn))
+Nn2 <- c(rpois(1, mun*attenuation(d2)*Tn))
+Nn <- Nn1 + Nn2
+#temps auxquels adviennent ces captures
+Tmpsn <- c(runif(Nn, 0, Tn))
+
+matin <- round(((fn)/Tn)*Nn) #proportion de la nuit qui appartient au matin
+
+Tmpsj <- sort(Tmpsj)
+Tmpsn <- sort(Tmpsn)
+
+#décallage pour avoir la journée de 0h à 24h, en ayant séparé la nuit en 2.
+Tmps <- c(Tmpsn[0:matin], Tmpsj + fn, Tmpsn[(matin+1):length(Tmpsn)] + (dn-fn))
+
+
+plot(x = Tmps, y = rep(0,  length(Tmps)), xlab ="jour", ylab="", main="Instants auxquels sont advenues les captures au cours de la journée")
+#mettre les légendes, les barres verticales pour le jour et la nuit ?
+```
+
+## Question 11
+
+Il s'agit de répéter l'expérience et de calculer une moyenne du nombre
+de captures par jour.
+
+```{r}
+#paramètres :
+#heure de la nuit et du jour :
+dn <- 18
+fn <- 8
+Tn <- 24 - dn + fn
+Tj <- 24 - Tn
+rep <- 1000  #nombre de répétition pour le calcul de la moyenne
+
+d1 <- 0.5
+d2 <- 1
+muj <- 1
+mun <- 3
+
+attenuation <- function(d){
+  exp(-(d**2)/2)
+}
+
+#boucle de calcul de la moyenne :
+S = c()
+for (k in 1:rep){
+  #nombre de capture le jour
+  Nj1 <- c(rpois(1, muj*attenuation(d1)*Tj))
+  Nj2 <- c(rpois(1, muj*attenuation(d2)*Tj))
+  Nj <- Nj1 + Nj2
+
+  #nombre de capture la nuit
+  Nn1 <- c(rpois(1, mun*attenuation(d1)*Tn))
+  Nn2 <- c(rpois(1, mun*attenuation(d2)*Tn))
+  Nn <- Nn1 + Nn2
+
+  #nombre total de captures
+  N <- Nj + Nn
+  S <- c(S, N)
+}
+
+paste("Le nombre de capture effectué par jour est :", round((sum(S)/length(S)), digits = 2))
+```
+
+## Question 12 :
+
+On peut obtenir ce résulat par le calcul car le paramètre de la loi de
+Poisson est le nombre moyen de capture par unité de temps. Ainsi, on
+retrouve le nombre de captures attendu en moyenne dans la journée en le
+multipliant par le temps d'interet. Ici, avec les activité noctures et
+diurne et les distances à la caméra, on formule le calcul suivant :
+
+```{r}
+paste("Le nombre moyen de capture effectuées par jour est :",round(muj*attenuation(d1)*Tj + muj*attenuation(d2)*Tj + mun*attenuation(d1)*Tn + mun*attenuation(d2)*Tn, digits=2))
+
+paste("L'erreur commise par l'estimateur est de l'ordre de :", round(1/sqrt(rep), digits = 3))
+```
+
+On constate que le résulat obtenu par calcul est très proche de celui
+obtenu avec les simulations de Monte-Carlo. Cela confirme que la
+**moyenne** calculée est un bon estimateur de l'**espérance**, on a ici
+une erreur de l'ordre du centième.
